@@ -44,14 +44,12 @@ def get_targer_domain(target_name, image_size, batch_size):
     if target_name == 'QMNIST':
         target_dataset = datasets.QMNIST(
             root='./',
-            train=True,
             transform=target_img_transfomation,
             download=True
         )
     elif target_name == 'SVHN':
         target_dataset = datasets.SVHN(
             root='./',
-            train=True,
             transform=target_img_transfomation,
             download=True
         )
