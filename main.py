@@ -26,7 +26,7 @@ def make_args_parser():
     parser.add_argument('-t', '--target',  choices=['QMNIST', 'MNIST'], default='QMNIST',
                         help='Define the target domain corresponding to the source domain')
     parser.add_argument('--cuda', type=bool, default=False,
-                        help='Enablement cuda option for PyTorch')
+                        help='Enable cuda option for PyTorch')
     # return an ArgumentParser object
     return parser.parse_args()
 
