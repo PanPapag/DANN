@@ -1,28 +1,32 @@
 import argparse
 import random
-import torch
+#import torch
+
+from model import DANNet
 
 """
-CONSTANTS & SEED INITIALIZATION
+CONSTANTS & SEEDS INITIALIZATION
 """
-lr = 1e-3
-batch_size = 128
-image_size = 28
-n_epoch = 100
+LR = 1e-3
+BATCH_SIZE = 128
+IMAGE_STREAM = 3
+IMAGE_SIZE = 28
+N_EPOCH = 100
 
 manual_seed = random.randint(1, 10000)
 random.seed(manual_seed)
-torch.manual_seed(manual_seed)
+#orch.manual_seed(manual_seed)
 
 def make_args_parser():
     # create an ArgumentParser object
     parser = argparse.ArgumentParser(description='DANNet - Unsupervised Domain Adaptation by Backpropagation')
     # fill parser with information about program arguments
-    parser.add_argument('-s', '--source',  choices=['MNIST', 'SYN', 'SVHN'], default='MNIST',
+    parser.add_argument('-s', '--source',  choices=['MNIST', 'SVHN'], default='MNIST',
                         help='Define the source domain')
-    parser.add_argument('-t', '--target',  choices=['MNIST-M', 'SVHN', 'MNIST'], default='MNIST-M',
-                        help='Define the target domain')
-
+    parser.add_argument('-t', '--target',  choices=['QMNIST', 'MNIST'], default='QMNIST',
+                        help='Define the target domain corresponding to the source domain')
+    parser.add_argument('--cuda', type=bool, default=False,
+                        help='Enablement cuda option for PyTorch')
     # return an ArgumentParser object
     return parser.parse_args()
 
@@ -39,6 +43,13 @@ def main():
     # parse and print arguments
     args = make_args_parser()
     print_args(args)
+    # Load both source and target domain datasets
+    source_dataloader = get_source_domain(args.source, IMAGE_SIZE, BATCH_SIZE)
+    target_dataloader = get_source_domain(args.target, IMAGE_SIZE, BATCH_SIZE)
+    # Load model
+    net = DANNet()
+    # Setup model
+
 
 if __name__ == '__main__':
     main()
