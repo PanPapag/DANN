@@ -2,7 +2,7 @@ import torch.nn as nn
 from torch.autograd import Function
 
 class DANNet(nn.Module):
-    
+
     def __init__(self):
         # Construct nn.Module superclass from the derived classs DANNet
         super(DANNet, self).__init__()
@@ -43,7 +43,6 @@ class DANNet(nn.Module):
         reverse_feature = ReverseLayer.apply(feature, lamda)
         class_prediction = self.class_classifier(feature)
         domain_prediction = self.domain_classifier(reverse_feature)
-
         return class_prediction, domain_prediction
 
 def ReverseLayer(Function):
@@ -51,11 +50,9 @@ def ReverseLayer(Function):
     @staticmethod
     def forward(ctx, x, lamda):
         ctx.lamda = lamda
-
         return x.view_as(x)
 
     @staticmethod
     def backward(ctx, grad_output):
         output = grad_output.neg() * ctx.lamda
-
         return output, None
