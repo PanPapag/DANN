@@ -1,8 +1,9 @@
 import argparse
+import datasets
+import model
 import random
-#import torch
+import torch
 
-from model import DANNet
 
 """
 CONSTANTS & SEEDS INITIALIZATION
@@ -15,7 +16,7 @@ N_EPOCH = 100
 
 manual_seed = random.randint(1, 10000)
 random.seed(manual_seed)
-#orch.manual_seed(manual_seed)
+torch.manual_seed(manual_seed)
 
 def make_args_parser():
     # create an ArgumentParser object
@@ -44,10 +45,10 @@ def main():
     args = make_args_parser()
     print_args(args)
     # Load both source and target domain datasets
-    source_dataloader = get_source_domain(args.source, IMAGE_SIZE, BATCH_SIZE)
-    target_dataloader = get_source_domain(args.target, IMAGE_SIZE, BATCH_SIZE)
+    #source_dataloader = datasets.get_source_domain(args.source, IMAGE_SIZE, BATCH_SIZE)
+    #target_dataloader = datasets.get_target_domain(args.target, IMAGE_SIZE, BATCH_SIZE)
     # Load model
-    net = DANNet()
+    net = model.DANNet()
     # Setup model
 
 

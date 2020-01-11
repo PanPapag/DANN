@@ -45,6 +45,7 @@ class DANNet(nn.Module):
         domain_prediction = self.domain_classifier(reverse_feature)
         return class_prediction, domain_prediction
 
+
 def ReverseLayer(Function):
 
     @staticmethod

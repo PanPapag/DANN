@@ -33,7 +33,7 @@ def get_source_domain(source_name, image_size, batch_size):
     # Return source's dataset DataLoader object
     return source_dataloader
 
-def get_targer_domain(target_name, image_size, batch_size):
+def get_target_domain(target_name, image_size, batch_size):
     # Define image target domain transformation
     target_img_transfomation = transforms.Compose([
         transforms.Resize(image_size),
