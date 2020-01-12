@@ -1,9 +1,8 @@
 import argparse
 import datasets
-import model
+import models
 import random
 import torch
-
 
 """
 CONSTANTS & SEEDS INITIALIZATION
@@ -25,9 +24,7 @@ def make_args_parser():
     parser.add_argument('-s', '--source',  choices=['MNIST', 'SVHN'], default='MNIST',
                         help='Define the source domain')
     parser.add_argument('-t', '--target',  choices=['QMNIST', 'MNIST'], default='QMNIST',
-                        help='Define the target domain corresponding to the source domain')
-    parser.add_argument('--cuda', type=bool, default=False,
-                        help='Enable cuda option for PyTorch')
+                        help='Define the target domain')
     # return an ArgumentParser object
     return parser.parse_args()
 
@@ -41,15 +38,30 @@ def print_args(args):
     print()
 
 def main():
+    # Check device available
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    print("Running on: {}".format(device))
     # parse and print arguments
     args = make_args_parser()
     print_args(args)
     # Load both source and target domain datasets
     #source_dataloader = datasets.get_source_domain(args.source, IMAGE_SIZE, BATCH_SIZE)
     #target_dataloader = datasets.get_target_domain(args.target, IMAGE_SIZE, BATCH_SIZE)
-    # Load model
-    net = model.DANNet()
-    # Setup model
+    # Init model
+    net = models.DANN()
+    if device == 'cuda':
+        net.cuda()
+    # Init criterions
+    class_criterion = torch.nn.NLLLoss()
+    domain_criterion = torch.nn.NLLLoss()
+    if device == 'cuda':
+        class_criterion.cuda()
+        domain_criterion.cuda()
+    # Init optimizer
+    optimizer = torch.optim.Adam(net.parameters(), lr=LR)
+    # Init all parameters to be optimized using Backpropagation
+    for param in net.parameters():
+        param.requires_grad = True
 
 
 if __name__ == '__main__':

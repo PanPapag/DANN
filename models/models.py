@@ -1,11 +1,11 @@
 import torch.nn as nn
 from torch.autograd import Function
 
-class DANNet(nn.Module):
+class DANN(nn.Module):
 
     def __init__(self):
         # Construct nn.Module superclass from the derived classs DANNet
-        super(DANNet, self).__init__()
+        super(DANN, self).__init__()
         # Construct DANNet architecture
         self.feature_extractor = nn.Sequential()
         self.feature_extractor.add_module('f_conv1', nn.Conv2d(3, 64, kernel_size=5))
