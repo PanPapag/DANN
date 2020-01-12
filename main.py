@@ -1,21 +1,12 @@
 import argparse
 import datasets
 import models
-import random
 import torch
+import train
 
-"""
-CONSTANTS & SEEDS INITIALIZATION
-"""
-LR = 1e-3
-BATCH_SIZE = 128
-IMAGE_STREAM = 3
-IMAGE_SIZE = 28
-N_EPOCH = 100
+import torch.optim as optim
 
-manual_seed = random.randint(1, 10000)
-random.seed(manual_seed)
-torch.manual_seed(manual_seed)
+from utils import constants
 
 def make_args_parser():
     # create an ArgumentParser object
@@ -45,23 +36,30 @@ def main():
     args = make_args_parser()
     print_args(args)
     # Load both source and target domain datasets
-    #source_dataloader = datasets.get_source_domain(args.source, IMAGE_SIZE, BATCH_SIZE)
-    #target_dataloader = datasets.get_target_domain(args.target, IMAGE_SIZE, BATCH_SIZE)
+    source_dataloader = 1
+    target_dataloader = 1
+    #source_dataloader = datasets.get_source_domain(args.source)
+    #target_dataloader = datasets.get_target_domain(args.target)
     # Init model
     net = models.DANN()
     if device == 'cuda':
         net.cuda()
-    # Init criterions
-    class_criterion = torch.nn.NLLLoss()
-    domain_criterion = torch.nn.NLLLoss()
+    # Init losses
+    class_loss = torch.nn.NLLLoss()
+    domain_loss = torch.nn.NLLLoss()
     if device == 'cuda':
         class_criterion.cuda()
         domain_criterion.cuda()
     # Init optimizer
-    optimizer = torch.optim.Adam(net.parameters(), lr=LR)
+    optimizer = optim.Adam(net.parameters(), lr=constants.LR)
     # Init all parameters to be optimized using Backpropagation
     for param in net.parameters():
         param.requires_grad = True
+    # Train model
+    for epoch in range(constants.N_EPOCHS):
+        train.train(net, class_loss, domain_loss, source_dataloader,
+                    target_dataloader, optimizer, epoch, device)
+
 
 
 if __name__ == '__main__':

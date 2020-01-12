@@ -1,11 +1,12 @@
 from torch.utils.data import DataLoader
 from torchvision import datasets
 from torchvision import transforms
+from utils import constants
 
-def get_source_domain(source_name, image_size, batch_size):
+def get_source_domain(source_name):
     # Define image source domain transformation
     source_img_transfomation = transforms.Compose([
-        transforms.Resize(image_size),
+        transforms.Resize(constants.IMAGE_SIZE),
         transforms.ToTensor(),
         transforms.Normalize(mean=(0.1307,), std=(0.3081,))
     ])
@@ -27,16 +28,16 @@ def get_source_domain(source_name, image_size, batch_size):
     # Define source dataloader
     source_dataloader = DataLoader(
         dataset= source_dataset,
-        batch_size=batch_size,
+        batch_size=constants.BATCH_SIZE,
         shuffle=True
     )
     # Return source's dataset DataLoader object
     return source_dataloader
 
-def get_target_domain(target_name, image_size, batch_size):
+def get_target_domain(target_name):
     # Define image target domain transformation
     target_img_transfomation = transforms.Compose([
-        transforms.Resize(image_size),
+        transforms.Resize(constants.IMAGE_SIZE),
         transforms.ToTensor(),
         transforms.Normalize(mean=(0.5, 0.5, 0.5), std=(0.5, 0.5, 0.5))
     ])
@@ -56,7 +57,7 @@ def get_target_domain(target_name, image_size, batch_size):
     # Define target dataloader
     target_dataloader = DataLoader(
         dataset=target_dataset,
-        batch_size=batch_size,
+        batch_size=constants.BATCH_SIZE,
         shuffle=True
     )
     # Return target's dataset DataLoader object
