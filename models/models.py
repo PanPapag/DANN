@@ -37,8 +37,8 @@ class DANN(nn.Module):
         self.domain_classifier.add_module('d_softmax', nn.LogSoftmax(dim=1))
 
     def forward(self, input, lamda):
-        input = input.expand(input_data.data.shape[0], 3, 28, 28)
-        feature = self.feature(input)
+        input = input.expand(input.data.shape[0], 3, 28, 28)
+        feature = self.feature_extractor(input)
         feature = feature.view(-1, 50 * 4 * 4)
         reverse_feature = ReverseLayer.apply(feature, lamda)
         class_prediction = self.class_classifier(feature)
