@@ -1,12 +1,17 @@
 import argparse
 import datasets
+import errno
 import models
 import torch
 import train
+import os
 
 import torch.optim as optim
 
 from utils import constants
+
+CURRENT_DIR_PATH = os.path.dirname(os.path.realpath(__file__))
+MODEL_CHECKPOINTS = CURRENT_DIR_PATH + '/models/models_checkpoints/'
 
 def make_args_parser():
     # create an ArgumentParser object
@@ -38,6 +43,15 @@ def main():
     # Load both source and target domain datasets
     source_dataloader = datasets.get_source_domain(args.source)
     target_dataloader = datasets.get_target_domain(args.target)
+    # Create directory to save model's checkpoints
+    try:
+        model_root = MODEL_CHECKPOINTS + args.source + '-' + args.target
+        os.makedirs(model_root)
+    except OSError as e:
+        if e.errno == errno.EEXIST:
+            pass
+        else:
+            raise
     # Init model
     net = models.DANN()
     if device == 'cuda':
@@ -54,11 +68,11 @@ def main():
     for param in net.parameters():
         param.requires_grad = True
     # Train model
-    '''
     for epoch in range(constants.N_EPOCHS):
         train.train(net, class_loss, domain_loss, source_dataloader,
-                    target_dataloader, optimizer, epoch, device)
-    '''
+                    target_dataloader, optimizer, epoch,
+                    model_root, device)
+
 
 
 if __name__ == '__main__':
