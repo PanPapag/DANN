@@ -1,3 +1,4 @@
+from .mnistm import MNISTM
 from torch.utils.data import DataLoader
 from torchvision import datasets
 from torchvision import transforms
@@ -13,14 +14,14 @@ def get_source_domain(source_name):
     # Define source dataset
     if source_name == 'MNIST':
         source_dataset = datasets.MNIST(
-            root='./',
+            root='./datasets',
             train=True,
             transform=source_img_transfomation,
             download=True
         )
-    elif source_name == 'QMNIST':
-        source_dataset = datasets.QMNIST(
-            root='./',
+    elif source_name == 'MNIST_M':
+        source_dataset = MNISTM(
+            root='./datasets',
             train=True,
             transform=source_img_transfomation,
             download=True
@@ -42,15 +43,9 @@ def get_target_domain(target_name):
         transforms.Normalize(mean=(0.5, 0.5, 0.5), std=(0.5, 0.5, 0.5))
     ])
     # Define target dataset
-    if target_name == 'QMNIST':
-        target_dataset = datasets.QMNIST(
-            root='./',
-            transform=target_img_transfomation,
-            download=True
-        )
-    elif target_name == 'SVHN':
-        target_dataset = datasets.SVHN(
-            root='./',
+    if target_name == 'MNIST_M':
+        target_dataset = MNISTM(
+            root='./datasets/',
             transform=target_img_transfomation,
             download=True
         )
