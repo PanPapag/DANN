@@ -27,7 +27,7 @@ class DANN(nn.Module):
         self.label_predictor.add_module('c_bn2', nn.BatchNorm1d(100))
         self.label_predictor.add_module('c_relu2', nn.ReLU(True))
         self.label_predictor.add_module('c_fc3', nn.Linear(100, 10))
-        self.label_predictor.add_module('c_softmax', nn.LogSoftmax())
+        self.label_predictor.add_module('c_softmax', nn.LogSoftmax(dim=1))
 
         self.domain_classifier = nn.Sequential()
         self.domain_classifier.add_module('d_fc1', nn.Linear(50 * 4 * 4, 100))
