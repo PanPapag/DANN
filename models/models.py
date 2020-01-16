@@ -41,12 +41,12 @@ class DANN(nn.Module):
         feature = self.feature_extractor(input)
         feature = feature.view(-1, 50 * 4 * 4)
         reverse_feature = ReverseLayer.apply(feature, lamda)
-        class_prediction = self.class_classifier(feature)
+        class_prediction = self.label_predictor(feature)
         domain_prediction = self.domain_classifier(reverse_feature)
         return class_prediction, domain_prediction
 
 
-def ReverseLayer(Function):
+class ReverseLayer(Function):
 
     @staticmethod
     def forward(ctx, x, lamda):
