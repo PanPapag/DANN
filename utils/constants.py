@@ -1,6 +1,5 @@
-import numpy
-import torch
 import random
+import torch
 
 """
 CONSTANTS & SEEDS INITIALIZATION
