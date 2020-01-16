@@ -36,23 +36,23 @@ def train(net, class_loss, domain_loss, source_dataloader,
             source_labels = Variable(torch.zeros((source_input.size()[0])).type(torch.LongTensor))
             target_labels = Variable(torch.ones((target_input.size()[0])).type(torch.LongTensor))
         # Train model using source data
-        src_class_output, src_domain_output = net(source_input, lamda)
-        class_loss = class_loss(src_class_output, source_label)
-        src_domain_loss = domain_loss(src_domain_output, source_labels)
+        source_label_pred, source_domain_pred = net(source_input, lamda)
+        source_class_error = class_loss(source_label_pred, source_label)
+        source_domain_error = domain_loss(source_domain_pred, source_labels)
         # Train model using target data
-        tgt_class_output, tgt_domain_output = net(target_input, lamda)
-        tgt_domain_loss = domain_loss(tgt_domain_output, target_labels)
+        _, target_domain_pred = net(target_input, lamda)
+        target_domain_error = domain_loss(target_domain_pred, target_labels)
         # Compute loss
-        domain_loss = src_domain_loss + tgt_domain_loss
-        loss = class_loss + domain_loss
+        domain_error = source_domain_error + target_domain_error
+        loss = source_class_error + domain_error
         # Back propagate
         loss.backward()
         optimizer.step()
         # Print loss
         if (batch_idx + 1) % 10 == 0:
             print('[{}/{} ({:.0f}%)]\tLoss: {:.6f}\tClass Loss: {:.6f}\tDomain Loss: {:.6f}'.format(
-                batch_idx * len(input2), len(target_dataloader.dataset),
-                100. * batch_idx / len(target_dataloader), loss.item(), class_loss.item(),
-                domain_loss.item()
+                batch_idx * len(target_input), len(target_dataloader.dataset),
+                100. * batch_idx / len(target_dataloader), loss.item(), source_class_error.item(),
+                domain_error.item()
             ))
 
