@@ -1,4 +1,5 @@
-"""Dataset setting and data loader for MNIST-M.
+"""
+Dataset setting and data loader for MNIST-M.
 Modified from
 https://github.com/pytorch/vision/blob/master/torchvision/datasets/mnist.py
 CREDIT: https://github.com/corenel
@@ -6,11 +7,12 @@ CREDIT: https://github.com/corenel
 
 import errno
 import os
-
 import torch
 import torch.utils.data as data
+
 from PIL import Image
 
+CURRENT_DIR_PATH = os.path.dirname(os.path.realpath(__file__))
 
 class MNISTM(data.Dataset):
     """`MNIST-M Dataset."""
@@ -19,14 +21,15 @@ class MNISTM(data.Dataset):
 
     raw_folder = "raw"
     processed_folder = "processed"
-    training_file = "mnist_m_train.pt"
-    test_file = "mnist_m_test.pt"
+    training_file = "training.pt"
+    test_file = "test.pt"
 
-    def __init__(self, root, mnist_root="data", train=True, transform=None, target_transform=None, download=False):
+    def __init__(self, root, train=True, transform=None, target_transform=None, download=False):
         """Init MNIST-M dataset."""
         super(MNISTM, self).__init__()
-        self.root = os.path.expanduser(root)
-        self.mnist_root = os.path.expanduser(mnist_root)
+        self.root = os.path.expanduser(root) + "/MNIST_M"
+        self.mnist_root = CURRENT_DIR_PATH + "/source/"
+        print(self.mnist_root)
         self.transform = transform
         self.target_transform = target_transform
         self.train = train  # training set or test set
@@ -47,7 +50,9 @@ class MNISTM(data.Dataset):
             )
 
     def __getitem__(self, index):
-        """Get images and target for data loader.
+        """
+        Get images and target for data loader.
+
         Args:
             index (int): Index
         Returns:
@@ -85,7 +90,7 @@ class MNISTM(data.Dataset):
     def download(self):
         """Download the MNIST data."""
         # import essential packages
-        from six.moves import urllib
+        import urllib
         import gzip
         import pickle
         from torchvision import datasets
@@ -106,6 +111,12 @@ class MNISTM(data.Dataset):
 
         # download pkl files
         print("Downloading " + self.url)
+        # TODO remove this
+        import urllib
+        proxy_support = urllib.request.ProxyHandler({"https": "https://10.144.1.10:8080"})
+        opener = urllib.request.build_opener(proxy_support)
+        urllib.request.install_opener(opener)
+        # TODO until here
         filename = self.url.rpartition("/")[2]
         file_path = os.path.join(self.root, self.raw_folder, filename)
         if not os.path.exists(file_path.replace(".gz", "")):
@@ -126,8 +137,8 @@ class MNISTM(data.Dataset):
         mnist_m_test_data = torch.ByteTensor(mnist_m_data[b"test"])
 
         # get MNIST labels
-        mnist_train_labels = datasets.MNIST(root=self.mnist_root, train=True, download=True).train_labels
-        mnist_test_labels = datasets.MNIST(root=self.mnist_root, train=False, download=True).test_labels
+        mnist_train_labels = datasets.MNIST(root=self.mnist_root, train=True, download=False).train_labels
+        mnist_test_labels = datasets.MNIST(root=self.mnist_root, train=False, download=False).test_labels
 
         # save MNIST-M dataset
         training_set = (mnist_m_train_data, mnist_train_labels)
