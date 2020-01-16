@@ -2,13 +2,12 @@ import numpy as np
 
 import torch
 
-
 from torch.autograd import Variable, Function
 from utils.utils import optimizer_scheduler
 from utils import constants
 
-def train(net, class_loss, domain_loss, source_dataloader,
-          target_dataloader, optimizer, epoch, device):
+def train(net, class_loss, domain_loss, source_dataloader, target_dataloader,
+        optimizer, epoch, model_root, device):
 
     len_dataloader = min(len(source_dataloader), len(target_dataloader))
     for batch_idx, (source, target) in enumerate(zip(source_dataloader, target_dataloader)):
@@ -55,4 +54,5 @@ def train(net, class_loss, domain_loss, source_dataloader,
                 100. * batch_idx / len(target_dataloader), loss.item(), source_class_error.item(),
                 domain_error.item()
             ))
-
+        # Save model
+        torch.save(net, '{0}/model_epoch_{1}.pth'.format(model_root, epoch))
