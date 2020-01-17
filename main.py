@@ -17,9 +17,9 @@ def make_args_parser():
     # create an ArgumentParser object
     parser = argparse.ArgumentParser(description='DANNet - Unsupervised Domain Adaptation by Backpropagation')
     # fill parser with information about program arguments
-    parser.add_argument('-s', '--source',  choices=['MNIST', 'MNIST_M'], default='MNIST',
+    parser.add_argument('-s', '--source', default='MNIST',
                         help='Define the source domain')
-    parser.add_argument('-t', '--target',  choices=['MNIST_M'], default='MNIST_M',
+    parser.add_argument('-t', '--target', default='MNIST_M',
                         help='Define the target domain')
     # return an ArgumentParser object
     return parser.parse_args()
