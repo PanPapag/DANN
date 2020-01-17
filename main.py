@@ -3,7 +3,7 @@ import datasets
 import errno
 import models
 import torch
-import train
+import train_test
 import os
 
 import torch.optim as optim
@@ -69,11 +69,10 @@ def main():
         param.requires_grad = True
     # Train model
     for epoch in range(constants.N_EPOCHS):
-        train.train(net, class_loss, domain_loss, source_dataloader,
-                    target_dataloader, optimizer, epoch,
-                    model_root, device)
-
-
+        train_test.train(net, class_loss, domain_loss, source_dataloader,
+                         target_dataloader, optimizer, epoch,
+                         model_root, device)
+        train_test.test(net, source_dataloader, target_dataloader, device)
 
 if __name__ == '__main__':
     main()
