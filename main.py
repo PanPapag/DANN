@@ -15,7 +15,7 @@ MODEL_CHECKPOINTS = CURRENT_DIR_PATH + '/models/models_checkpoints/'
 
 def make_args_parser():
     # create an ArgumentParser object
-    parser = argparse.ArgumentParser(description='DANNet - Unsupervised Domain Adaptation by Backpropagation')
+    parser = argparse.ArgumentParser(description='DANN - Unsupervised Domain Adaptation by Backpropagation')
     # fill parser with information about program arguments
     parser.add_argument('-s', '--source', default='MNIST',
                         help='Define the source domain')

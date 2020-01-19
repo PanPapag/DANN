@@ -32,26 +32,26 @@ def test(net, source_dataloader, target_dataloader, device):
         source_domain_pred = source_domain_pred.data.max(1, keepdim=True)[1]
         source_domain_correct += source_domain_pred.eq(source_labels.data.view_as(source_domain_pred)).cpu().sum()
 
-        # Test target data
-        for batch_idx, target_data in enumerate(target_dataloader):
-            # Setup hyperparameters
-            p = float(batch_idx) / len(target_dataloader)
-            lamda = 2. / (1. + np.exp(-10 * p)) - 1.
-            # Get input data along with corresponding label
-            target_input, target_label = source_data
-            # Transfer data to PyTorch tensor and define PyTorch Variable for target predicted labels
-            if device == 'cuda':
-                target_input, target_label = Variable(target_input.cuda()), Variable(target_label.cuda())
-                target_labels = Variable(torch.zeros((target_input.size()[0])).type(torch.LongTensor).cuda())
-            else:
-                target_input, target_label = Variable(target_input), Variable(target_label)
-                target_labels = Variable(torch.zeros((target_input.size()[0])).type(torch.LongTensor))
-            # Compute target accuracy both for label and domain predictions
-            target_label_pred, target_domain_pred = net(target_input, lamda)
-            target_label_pred = target_label_pred.data.max(1, keepdim=True)[1]
-            target_label_correct += target_label_pred.eq(target_label.data.view_as(target_label_pred)).cpu().sum()
-            target_domain_pred = target_domain_pred.data.max(1, keepdim=True)[1]
-            target_domain_correct += target_domain_pred.eq(target_labels.data.view_as(target_domain_pred)).cpu().sum()
+    # Test target data
+    for batch_idx, target_data in enumerate(target_dataloader):
+        # Setup hyperparameters
+        p = float(batch_idx) / len(target_dataloader)
+        lamda = 2. / (1. + np.exp(-10 * p)) - 1.
+        # Get input data along with corresponding label
+        target_input, target_label = source_data
+        # Transfer data to PyTorch tensor and define PyTorch Variable for target predicted labels
+        if device == 'cuda':
+            target_input, target_label = Variable(target_input.cuda()), Variable(target_label.cuda())
+            target_labels = Variable(torch.zeros((target_input.size()[0])).type(torch.LongTensor).cuda())
+        else:
+            target_input, target_label = Variable(target_input), Variable(target_label)
+            target_labels = Variable(torch.zeros((target_input.size()[0])).type(torch.LongTensor))
+        # Compute target accuracy both for label and domain predictions
+        target_label_pred, target_domain_pred = net(target_input, lamda)
+        target_label_pred = target_label_pred.data.max(1, keepdim=True)[1]
+        target_label_correct += target_label_pred.eq(target_label.data.view_as(target_label_pred)).cpu().sum()
+        target_domain_pred = target_domain_pred.data.max(1, keepdim=True)[1]
+        target_domain_correct += target_domain_pred.eq(target_labels.data.view_as(target_domain_pred)).cpu().sum()
     # Compute domain correctness
     domain_correct = source_domain_correct + target_domain_correct
     # Print results

@@ -29,7 +29,6 @@ class MNISTM(data.Dataset):
         super(MNISTM, self).__init__()
         self.root = os.path.expanduser(root) + "/MNIST_M"
         self.mnist_root = CURRENT_DIR_PATH + "/source/"
-        print(self.mnist_root)
         self.transform = transform
         self.target_transform = target_transform
         self.train = train  # training set or test set
@@ -111,12 +110,6 @@ class MNISTM(data.Dataset):
 
         # download pkl files
         print("Downloading " + self.url)
-        # TODO remove this
-        import urllib
-        proxy_support = urllib.request.ProxyHandler({"https": "https://10.144.1.10:8080"})
-        opener = urllib.request.build_opener(proxy_support)
-        urllib.request.install_opener(opener)
-        # TODO until here
         filename = self.url.rpartition("/")[2]
         file_path = os.path.join(self.root, self.raw_folder, filename)
         if not os.path.exists(file_path.replace(".gz", "")):

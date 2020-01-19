@@ -9,12 +9,6 @@ from utils import constants
 
 CURRENT_DIR_PATH = os.path.dirname(os.path.realpath(__file__))
 
-# TODO remove this
-import urllib
-proxy_support = urllib.request.ProxyHandler({"http": "http://10.144.1.10:8080"})
-opener = urllib.request.build_opener(proxy_support)
-urllib.request.install_opener(opener)
-
 def get_source_domain(source_name):
     # Define root folder to store source dataset
     root = CURRENT_DIR_PATH + "/source"
