@@ -47,8 +47,6 @@ def train(net, class_loss, domain_loss, source_dataloader, target_dataloader,
         loss.backward()
         optimizer.step()
         # Print loss
-        if batch_idx * len(target_input) > 5000:
-            break
         if (batch_idx + 1) % 10 == 0:
             print('[{}/{} ({:.0f}%)]\tLoss: {:.6f}\tClass Loss: {:.6f}\tDomain Loss: {:.6f}'.format(
                 batch_idx * len(target_input), len(target_dataloader.dataset),
