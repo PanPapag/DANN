@@ -19,7 +19,8 @@
 1. Add more available datasets
 2. Add model checkpoint saving option, so as to load a pretrained model and test.
 
-Feel free to contribute :) 
+Feel free to contribute :smiley:
+
 ### License
 This project is licensed under the MIT License.
 
